@@ -1,0 +1,12 @@
+*.pyc
+*~
+.env
+venv
+.idea
+*.sqlite3
+.Ds_store
+*.yml
+Dockerfile
+data
+migrations
+__pycache__
