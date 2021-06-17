@@ -8,6 +8,10 @@ class Artist(models.Model):
     def __str__(self):
         return self.name
 
+    @property
+    def events(self):
+        return self.event_set.all()
+
 
 class Event(models.Model):
     name = models.CharField(max_length=100)
