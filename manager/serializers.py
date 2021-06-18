@@ -5,15 +5,7 @@ from .models import Artist, Event
 class EventSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event
-        fields = [
-            "id",
-            "name",
-            "description",
-            "location",
-            "latitude",
-            "longitude",
-            "artists",
-        ]
+        fields = "__all__"
         depth = 1
 
 
@@ -22,9 +14,10 @@ class ArtistSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Artist
-        fields = [
-            "id",
-            "name",
-            "genre",
-            "events",
-        ]
+        fields = ["id", "name", "genre", "events"]
+
+
+class RelatedArtistSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Artist
+        fields = "__all__"
