@@ -7,5 +7,5 @@ urlpatterns = [
     path('artists/<int:pk>', views.ArtistDetail.as_view(), name="artist_detail"),
     path('events/', views.EventList.as_view(), name="events_list"),
     path('events/<int:pk>', views.EventDetail.as_view(), name="event_detail"),
-    path('rel-artists/<int:pk>', views.ArtistSameEventsList.as_view(), name="related_artists")
+    path('rel-artists/<int:pk>', views.RelatedArtistsList.as_view(), name="related_artists")
 ]

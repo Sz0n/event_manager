@@ -56,7 +56,7 @@ class EventDetail(generics.RetrieveUpdateDestroyAPIView):
         return queryset
 
 
-class ArtistSameEventsList(APIView):
+class RelatedArtistsList(APIView):
 
     def get_object(self, pk):
         try:
@@ -72,7 +72,7 @@ class ArtistSameEventsList(APIView):
             related_artists |= event.artists.all()
 
         if request.GET.get("search") is not None:
-            related_artists = related_artists.filter(name=request.GET.get("search"))
+            related_artists = related_artists.filter(name__icontains=request.GET.get("search"))
 
         serializer = RelatedArtistSerializer(
             related_artists.distinct().order_by(request.GET.get("ordering", "id")), many=True)
