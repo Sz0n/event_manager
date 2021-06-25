@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'manager',
+    'accounts',
+    'rest_framework.authtoken'
 ]
 
 MIDDLEWARE = [
@@ -84,6 +86,15 @@ DATABASES = {
         'HOST': 'db',
         'PORT': 5432,
     }
+}
+
+
+# Rest framework
+
+REST_FRAMEWORK = {
+   'DEFAULT_AUTHENTICATION_CLASSES': (
+       'rest_framework.authentication.TokenAuthentication',
+   ),
 }
 
 

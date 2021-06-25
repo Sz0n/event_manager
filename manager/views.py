@@ -4,9 +4,11 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import Artist, Event
 from .serializers import ArtistSerializer, EventSerializer, RelatedArtistSerializer
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 
 class ArtistList(generics.ListCreateAPIView):
+    # permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = ArtistSerializer
 
     def get_queryset(self):
@@ -31,6 +33,7 @@ class ArtistDetail(generics.RetrieveUpdateDestroyAPIView):
 
 
 class EventList(generics.ListCreateAPIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = EventSerializer
     filter_backends = (filters.SearchFilter, filters.OrderingFilter)
     search_fields = ("name",)
