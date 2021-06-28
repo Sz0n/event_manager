@@ -4,27 +4,10 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import Artist, Event
 from .serializers import ArtistSerializer, EventSerializer, RelatedArtistSerializer
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticated
 
 
-class ArtistList(generics.ListCreateAPIView):
-    # permission_classes = [IsAuthenticatedOrReadOnly]
-    serializer_class = ArtistSerializer
-
-    def get_queryset(self):
-        queryset = Artist.objects.all()
-        return queryset
-
-    def create(self, request, *args, **kwargs):
-        serializer = ArtistSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-class ArtistDetail(generics.RetrieveUpdateDestroyAPIView):
+class ArtistList(generics.ListAPIView):
     serializer_class = ArtistSerializer
 
     def get_queryset(self):
@@ -32,8 +15,12 @@ class ArtistDetail(generics.RetrieveUpdateDestroyAPIView):
         return queryset
 
 
-class EventList(generics.ListCreateAPIView):
-    permission_classes = [IsAuthenticatedOrReadOnly]
+class CreateArtist(generics.CreateAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = ArtistSerializer
+
+
+class EventList(generics.ListAPIView):
     serializer_class = EventSerializer
     filter_backends = (filters.SearchFilter, filters.OrderingFilter)
     search_fields = ("name",)
@@ -42,21 +29,10 @@ class EventList(generics.ListCreateAPIView):
         queryset = Event.objects.all()
         return queryset
 
-    def create(self, request, *args, **kwargs):
-        serializer = EventSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-class EventDetail(generics.RetrieveUpdateDestroyAPIView):
+class CreateEvent(generics.CreateAPIView):
+    permission_classes = [IsAuthenticated]
     serializer_class = EventSerializer
-
-    def get_queryset(self):
-        queryset = Event.objects.all()
-        return queryset
 
 
 class RelatedArtistsList(APIView):

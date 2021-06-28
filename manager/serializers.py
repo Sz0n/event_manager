@@ -8,13 +8,25 @@ class EventSerializer(serializers.ModelSerializer):
         fields = "__all__"
         depth = 1
 
+    def create(self, validated_data):
+        event = Event.objects.create(**validated_data)
+        return event
+
 
 class ArtistSerializer(serializers.ModelSerializer):
     events = EventSerializer(many=True)
 
     class Meta:
         model = Artist
-        fields = ["id", "name", "genre", "events"]
+        fields = '__all__'
+
+    def create(self, validated_data):
+        rel_events = validated_data.pop('events', None)
+        artist = Artist.objects.create(**validated_data)
+        for event in rel_events:
+            event_obj = Event.objects.get(name=event["name"])
+            artist.event_set.add(event_obj)
+        return artist
 
 
 class RelatedArtistSerializer(serializers.ModelSerializer):
