@@ -8,5 +8,4 @@ venv
 *.yml
 Dockerfile
 data
-migrations
 __pycache__
