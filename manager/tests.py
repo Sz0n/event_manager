@@ -18,6 +18,22 @@ class RegistrationTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
 
+class ReceiveTokenTestCase(APITestCase):
+
+    user_data = {
+        "username": "test_username",
+        "password": "test_password"
+    }
+
+    def setUp(self):
+        self.client.post("/account/register/", self.user_data)
+
+    def test_token(self):
+        response = self.client.post("/account/token/", self.user_data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertContains(response, "access")
+
+
 class EventsViewTestCase(APITestCase):
 
     events_url = reverse("events_list")
