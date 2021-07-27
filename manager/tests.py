@@ -33,6 +33,14 @@ class ReceiveTokenTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertContains(response, "access")
 
+    def test_token_unauthenticated(self):
+        not_user_data = {
+            "username": "test_wrong_username",
+            "password": "test_wrong_password"
+        }
+        response = self.client.post("/account/token/", not_user_data)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
 
 class EventsViewTestCase(APITestCase):
 
@@ -56,6 +64,14 @@ class EventsViewTestCase(APITestCase):
 
 class EventCreateViewTestCase(APITestCase):
 
+    event_data = {
+        "name": "test_event_name",
+        "description": "test_description",
+        "location": "test_place",
+        "latitude": "54.3645330000000000",
+        "longitude": "18.6173940000000000"
+    }
+
     def setUp(self):
         self.api_authentication()
 
@@ -68,17 +84,14 @@ class EventCreateViewTestCase(APITestCase):
         token = self.client.post("/account/token/", user_data)
         self.client.credentials(HTTP_AUTHORIZATION="Bearer " + token.data["access"])
 
-    def test_create_event(self):
-
-        event_data = {
-            "name": "test_event_name",
-            "description": "test_description",
-            "location": "test_place",
-            "latitude": "54.3645330000000000",
-            "longitude": "18.6173940000000000"
-        }
-        response = self.client.post("/events-add/", event_data)
+    def test_create_event_authenticated(self):
+        response = self.client.post("/events-add/", self.event_data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_create_event_unauthenticated(self):
+        self.client.force_authenticate(user=None)
+        response = self.client.post("/events-add/", self.event_data)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
 
 class ArtistsViewTestCase(APITestCase):
