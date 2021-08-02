@@ -23,7 +23,7 @@ class CreateArtist(generics.CreateAPIView):
 class EventList(generics.ListAPIView):
     serializer_class = EventSerializer
     filter_backends = (filters.SearchFilter, filters.OrderingFilter)
-    search_fields = ("name",)
+    search_fields = ("location",)
 
     def get_queryset(self):
         queryset = Event.objects.all()
